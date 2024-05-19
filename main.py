@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
         self.chat = ChatWindow()
 
         # 将对话框窗口和图表窗口添加到布局中
-        self.layout.addWidget(self.dialog_window,1,1,1,1)
+        # self.layout.addWidget(self.dialog_window,1,1,1,1)
         self.layout.addWidget(self.chart_window,0,1,5,1)
         self.layout.addWidget(self.todo_list,0,0,1,1)
         self.layout.addWidget(self.chat,1,0,1,1)
