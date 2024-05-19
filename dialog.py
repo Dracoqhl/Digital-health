@@ -25,7 +25,7 @@ class DialogWindow(QWidget):
 
         # 将文本输入框和按钮添加到布局中
         layout.addWidget(self.line_edit)
-        layout.addWidget(button)
+        layout.addWidget(button) 
 
         # 设置窗口的布局
         self.setLayout(layout)

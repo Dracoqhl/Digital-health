@@ -1,31 +1,33 @@
 import sys
-from PyQt6.QtWidgets import QGridLayout,QLabel,QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLineEdit
-# from PyQt6.QtCharts import QChart, QChartView, QLineSeries
-from PyQt6.QtGui import QPainter
-from pyqtgraph import PlotWidget
-from PyQt6.QtGui import QPen, QColor
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QGridLayout
+from PyQt6.QtGui import QPen, QColor, QFont
 from PyQt6.QtCore import Qt
 import numpy as np
+import pyqtgraph as pg
 
 # 自定义按钮样式
 button_style = """
 QPushButton {
-    border-radius: 10px; /* 设置圆角，值越高越圆 */
-    background-color: #1a73e8; /* 设置背景颜色 */
-    border: none; /* 无边框 */
-    padding: 5px; /* 内边距 */
-    color: white; /* 文字颜色 */
-    font-size: 10px; /* 字体大小 */
+    border-radius: 10px;
+    background-color: #34495e; /* 更深的背景颜色 */
+    border: none;
+    padding: 10px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 QPushButton:hover {
-    background-color: #5a8dee; /* 鼠标悬停时的背景颜色 */
+    background-color: #5a8dee;
 }
 
 QPushButton:pressed {
-    background-color: #145cc2; /* 按钮按下时的背景颜色 */
+    background-color: #145cc2;
 }
 """
+
+# 设置全局字体
+font = QFont('Arial', 12)
 
 class ChartWindow(QWidget):
     def __init__(self):
@@ -33,51 +35,53 @@ class ChartWindow(QWidget):
         self.initUI()
 
     def initUI(self):
-        # 创建一个折线图系列
-        self.layout = QGridLayout(self)  # 使用self作为布局的父组件
+        self.layout = QGridLayout(self)
 
-        label = QLabel("Section 1 Content")
+        label = QLabel("血糖监测图表")
+        label.setFont(font)
+        label.setStyleSheet("color: #2c3e50;")
         self.layout.addWidget(label, 0, 0, 1, 1)
 
         # 创建PlotWidget
-        self.plot_widget = PlotWidget()
-        self.layout.addWidget(self.plot_widget, 1, 0, 10, 10)
+        self.plot_widget = pg.PlotWidget()
+        self.layout.addWidget(self.plot_widget, 1, 0, 11, 11)
 
-        # 设置背景颜色为白色
-        self.plot_widget.setBackground((255, 255, 255))
+        # 设置背景颜色和透明度
+        background_color = QColor(236, 240, 241, 200)  # RGB: #ecf0f1, Alpha: 200
+        self.plot_widget.setBackground(background_color)
+
+        # 设置窗口的背景为透明
+        self.setStyleSheet("QWidget { background: transparent; }")
+
         # 初始化曲线数据
         self.x = np.arange(24)
         self.y = np.random.randint(80, 120, size=24)
-        self.pen = QPen(QColor(35, 119, 250), 0.1, style=Qt.PenStyle.SolidLine)
-        self.curve = self.plot_widget.plot(pen=self.pen)  # 获取折线对象
+        self.pen = QPen(QColor(68, 102, 242), 0.15, style=Qt.PenStyle.SolidLine)  # 更改为深蓝色曲线
+        self.curve = self.plot_widget.plot(pen=self.pen)
 
         # 绘制曲线图
-        self.plot_widget.setLabel('left', '血糖 (mg/dL)')
-        self.plot_widget.setLabel('bottom', '小时(hour)')
-        self.plot_widget.showGrid(x=True, y=True, alpha=0.5)
+        self.plot_widget.setLabel('left', '血糖 (mg/dL)', color='#2c3e50', font=font)
+        self.plot_widget.setLabel('bottom', '小时(hour)', color='#2c3e50', font=font)
+        self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
         self.curve.setData(self.x, self.y)
         self.plot_widget.setXRange(min(self.x), max(self.x))
         self.plot_widget.setYRange(min(self.y), max(self.y))
-  
-
-        # # 将图表视图添加到布局中
-        # self.layout.addWidget(self.plot_widget)
 
         # 创建刷新数据按钮，并设置样式
         self.refresh_button = QPushButton("刷新数据")
         self.refresh_button.clicked.connect(self.refresh_data)
+        self.refresh_button.setFont(font)
         self.refresh_button.setStyleSheet(button_style)
-        self.layout.addWidget(self.refresh_button, 12, 4, 1, 1)
+        self.layout.addWidget(self.refresh_button, 12, 5, 1, 1)
 
-        # 设置窗口的布局
         self.setLayout(self.layout)
 
     def refresh_data(self):
-        # 更新曲线数据
         self.y = np.random.randint(80, 120, size=24)
         self.curve.setData(self.x, self.y)
         self.plot_widget.setXRange(min(self.x), max(self.x))
         self.plot_widget.setYRange(min(self.y), max(self.y))
+
 
 class TestWindow(QMainWindow):
     def __init__(self):
