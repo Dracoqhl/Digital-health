@@ -10,6 +10,7 @@ from chart import ChartWindow
 from dialog import DialogWindow
 from todo_list import TodoList
 from chat import ChatWindow
+from food_new import SmartRecipeBook
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -18,7 +19,7 @@ class MainWindow(QMainWindow):
     def initUI(self):
         # 设置主窗口的标题和大小
         self.setWindowTitle('数字医疗项目demo版')
-        self.setGeometry(100, 100, 950, 600)
+        self.setGeometry(100, 100, 1100, 600)
         # 设置样式表
         self.setStyleSheet("""
             QMainWindow {
@@ -43,12 +44,20 @@ class MainWindow(QMainWindow):
         self.chart_window = ChartWindow()
         self.todo_list = TodoList()
         self.chat = ChatWindow()
+        self.food = SmartRecipeBook()
 
         # 将对话框窗口和图表窗口添加到布局中
+        # 放在第 0 行第 0 列，并使其跨越 1 行 2 列
         # self.layout.addWidget(self.dialog_window,1,1,1,1)
-        self.layout.addWidget(self.chart_window,0,1,5,1)
-        self.layout.addWidget(self.todo_list,0,0,1,1)
-        self.layout.addWidget(self.chat,1,0,1,1)
+        h = 3
+        l = 1
+        self.layout.addWidget(self.chat,0,0,h,l)
+        self.layout.addWidget(self.chart_window,0,l,h,1)
+        hh = 3
+        ll = 1
+        self.layout.addWidget(self.food,h,0,hh,ll)
+        self.layout.addWidget(self.todo_list,h,ll,hh,1)
+        
         # 设置中心窗口的布局
         central_widget.setLayout(self.layout)
 
