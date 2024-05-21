@@ -190,7 +190,12 @@ class ChatWindow(QWidget):
 
 
 # Initialize the API key and LLM instance
-api_key = "20d3eb6d7db71a080e8c3185ff8fe1cd.JWDCLpQkwFGbn8Ai"
+# 读取配置文件
+with open('config.json') as config_file:
+    config = json.load(config_file)
+
+# 获取 API 密钥
+api_key = config['api_key']
 llm = ZhipuAILLM(api_key)
 
 class TestWindow(QMainWindow):
