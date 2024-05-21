@@ -31,7 +31,7 @@ QPushButton:pressed {
 font = QFont('Arial', 12)
 # 时间  血糖值  收缩压  舒张压  心率    体温
 # 标签映射字典
-data_dic = {'0': '血糖值',
+data_dic = {'0': '血糖值mmol/L',
             '1': '收缩压',
             '2': '舒张压',
             '3': '心率',
@@ -79,40 +79,44 @@ class ChartWindow(QWidget):
         self.plot_widget.setLabel('bottom', '时间', color='#2c3e50', font=font)
         self.plot_widget.showGrid(x=True, y=True, alpha=0.3)
 
-                # 绘制上一个和下一个数据按钮
-        self.prev_button = QPushButton()
-        self.prev_button.setIcon(QIcon("img/left_arrow.png"))
-        self.prev_button.setIconSize(QSize(36, 36))  # 调整图标大小
+        self.prev_button = QPushButton("上一条", self)
         self.prev_button.clicked.connect(self.prev_data)
-        self.prev_button.setFont(font)
         self.prev_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(236, 240, 241, 200);  # 设置为图表背景色并透明
-                border: none;
-                border-radius: 10px;  # 圆角矩形
+                background-color: #5d1370;
+                color: white;
+                border: 1px solid #5d1370;
+                border-radius: 5px;
+                padding: 5px;
             }
             QPushButton:hover {
-                background-color: rgba(236, 240, 241, 150);  # 鼠标悬停时更透明
+                background-color: #7d3c98;  /* 修改为方案1的悬停颜色 */
+            }
+            QPushButton:pressed {
+                background-color: #4a1057;  /* 修改为方案1的按下颜色 */
             }
         """)
-        self.layout.addWidget(self.prev_button, 12, 2, 1, 1)
 
-        self.next_button = QPushButton()
-        self.next_button.setIcon(QIcon("img/right_arrow.png"))
-        self.next_button.setIconSize(QSize(36, 36))  # 调整图标大小
+        self.layout.addWidget(self.prev_button, 12, 1, 1, 3)
+
+        self.next_button = QPushButton("下一条", self)
         self.next_button.clicked.connect(self.next_data)
-        self.next_button.setFont(font)
         self.next_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(236, 240, 241, 200);  # 设置为图表背景色并透明
-                border: none;
-                border-radius: 10px;  # 圆角矩形
+                background-color: #5d1370;
+                color: white;
+                border: 1px solid #5d1370;
+                border-radius: 5px;
+                padding: 5px;
             }
             QPushButton:hover {
-                background-color: rgba(236, 240, 241, 150);  # 鼠标悬停时更透明
+                background-color: #7d3c98;  /* 修改为方案1的悬停颜色 */
+            }
+            QPushButton:pressed {
+                background-color: #4a1057;  /* 修改为方案1的按下颜色 */
             }
         """)
-        self.layout.addWidget(self.next_button, 12, 8, 1, 1)
+        self.layout.addWidget(self.next_button, 12, 7, 1, 3)
 
 
 
@@ -120,7 +124,7 @@ class ChartWindow(QWidget):
 
     def loadData(self):
         # 从Excel文件加载数据
-        self.data = pd.read_excel('comprehensive_health_data.xlsx')
+        self.data = pd.read_excel('./data/comprehensive_health_data.xlsx')
         print(self.data['时间'].values)
         print(self.data[data_dic[str(self.current_index)]].values)
         self.columns = self.data.columns[1:]  # 第一列是时间，后面的列是生理指标

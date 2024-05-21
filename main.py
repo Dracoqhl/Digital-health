@@ -6,11 +6,11 @@ from pyqtgraph import PlotWidget
 from PyQt6.QtGui import QPen, QColor
 from PyQt6.QtCore import Qt
 import numpy as np
-from chart import ChartWindow
-from dialog import DialogWindow
-from todo_list import TodoList
-from chat import ChatWindow
-from food_new import SmartRecipeBook
+from script.chart import ChartWindow
+from script.dialog import DialogWindow
+from script.todo_list import TodoList
+from script.chat import ChatWindow
+from script.food_new import SmartRecipeBook
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -23,7 +23,7 @@ class MainWindow(QMainWindow):
         # 设置样式表
         self.setStyleSheet("""
             QMainWindow {
-                background-image: url('banner06.jpg');
+                background-image: url('./img/banner06.jpg');
                 background-position: center;
                 background-repeat: no-repeat;
             }
