@@ -16,11 +16,23 @@ class ZhipuAILLM:
         self.api_key = api_key
         self.model = model
         self.base_url = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+        
+    def clean_response(self, response):
+        cleaned_response = response.replace("#", "*").strip()
+        cleaned_response = "\n".join(line for line in cleaned_response.splitlines() if line.strip())
+        return cleaned_response
 
     def analyze_document(self, document_content):
+        prompt = (
+        "请根据提供的数据进行分析并给出相应的建议：\n"
+        "1. 如果提供的是血糖数据，请根据指标值分析具体的身体状况，并给出适当的饮食、休息、用药等方面的建议。\n"
+        "2. 如果提供的是用药数据，请统计用药情况，给出下一个疗程的建议，并提醒需要注意的事项。\n"
+        "3. 如果提供的是饮食数据，请分析饮食情况，给出改善饮食的建议，以帮助控制血糖。\n"
+        "请在300字以内回答以下问题：{document_content}"
+    ).format(document_content=document_content)
         payload = {
             "model": self.model,
-            "messages": [{"role": "user", "content": document_content}],
+            "messages": [{"role": "user", "content": prompt}],
         }
         token = generate_token(self.api_key)
         headers = {
@@ -29,7 +41,8 @@ class ZhipuAILLM:
         }
         response = requests.post(self.base_url, json=payload, headers=headers)
         response.raise_for_status()
-        return json.loads(response.text)["choices"][0]["message"]["content"]
+        raw_res = json.loads(response.text)["choices"][0]["message"]["content"]
+        return self.clean_response(raw_res)
 
 class ChatWindow(QWidget):
     def __init__(self):
