@@ -50,13 +50,13 @@ class MainWindow(QMainWindow):
         # 放在第 0 行第 0 列，并使其跨越 1 行 2 列
         # self.layout.addWidget(self.dialog_window,1,1,1,1)
         h = 3
-        l = 1
+        l = 6
         self.layout.addWidget(self.chat,0,0,h,l)
-        self.layout.addWidget(self.chart_window,0,l,h,1)
+        self.layout.addWidget(self.chart_window,0,l,h,9)
         hh = 3
-        ll = 1
+        ll = 5
         self.layout.addWidget(self.food,h,0,hh,ll)
-        self.layout.addWidget(self.todo_list,h,ll,hh,1)
+        self.layout.addWidget(self.todo_list,h,ll,hh,10)
         
         # 设置中心窗口的布局
         central_widget.setLayout(self.layout)
